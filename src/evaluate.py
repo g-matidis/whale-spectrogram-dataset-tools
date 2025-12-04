@@ -9,7 +9,6 @@ import csv, json
 # ==============================================================================
 #                               TYPE DEFINITIONS
 # ==============================================================================
-
 # Dictionary where keys are class names and values are dictionaries with the metric results 
 # (e.g. { 'objectX' : {'Precision': 0.9876543210, 'Recall': ..., ...})
 MetricsData = Dict[str, Dict[str, float | int]]
