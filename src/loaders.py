@@ -2,7 +2,7 @@ from pathlib import Path
 import json
 from torch.utils.data import Dataset
 from abc import ABC, abstractmethod
-from typing import Tuple
+from typing import Tuple, List, Dict, Any, Union, Callable
 from PIL import Image
 
 def _is_valid_file(filepath: Path) -> bool:
@@ -13,10 +13,27 @@ def _is_valid_file(filepath: Path) -> bool:
     return all(map(check, filepath.parts))
 
 class WhalesBaseDataset(Dataset, ABC):
-    def __init__(self, dataset_dir, transform=None):
+    """
+    Base Class for the Humpback Whale Song Spectrogram Dataset. It handles the core logic for loading and parsing the 
+    data.
+
+    Attributes:
+        image_dir: Resolved path to the subset's image directory.
+        label_dir: Resolved path to the subset's label directory.
+        image_paths: List of image file paths of teh subset.
+        labels_data: Dictionary of all parsed labels. Image names serve as keys.      
+    """
+
+    def __init__(
+        self, 
+        dataset_dir: Union[str, Path], 
+        transform: Callable=None
+    ):
         super().__init__()
         self.dataset_dir = Path(dataset_dir)
         self.transform = transform
+
+        # Get the paths to images and labels for the subset
         self.image_dir, self.label_dir = self._get_paths()
 
         # Validate directories
@@ -36,6 +53,7 @@ class WhalesBaseDataset(Dataset, ABC):
         # Load the labels
         self.labels_data = self._parse_all_labels()
 
+        # Validate 1:1 correspondence between images and label
         for img_path in self.image_paths:
             if img_path.name not in self.labels_data:
                 raise FileNotFoundError(
@@ -43,16 +61,33 @@ class WhalesBaseDataset(Dataset, ABC):
                 )
            
     @abstractmethod
-    def _get_paths(self):
+    def _get_paths(self) -> Tuple[Path, Path]:
+        """
+        Abstract method to get the specific image and label directories.
+
+        Returns:
+            A tuple containing (image_dir, label_dir).
+        """
+
         pass
 
     @abstractmethod
-    def _parse_label(self, label_path: Path):
+    def _parse_label(self, label_path: Path) -> Dict[str, Any]:
+        """
+        Abstract method to parse a specific label file format.
+
+        Args:
+            label_path: Path to the JSON file with the label(s).
+
+        Returns:
+            Dict: A dictionary where the key is the image filename and the value is its annotation data.
+        """
         pass
 
     def _parse_all_labels(self):
-        label_paths = self.label_dir.rglob('*.json')
+        """Iterates over all JSON files in the label directory and aggregates them into a single dictionary."""
 
+        label_paths = self.label_dir.rglob('*.json')
         labels_data = {}
         for path in label_paths:
             if _is_valid_file(path):
@@ -63,13 +98,26 @@ class WhalesBaseDataset(Dataset, ABC):
         return labels_data
     
     def __len__(self) -> int:
-        """Returns the total number of samples."""
+        """Returns the total number of samples of the dataset."""
         return len(self.image_paths)
         
-    def __getitem__(self, index):
+    def __getitem__(self, index: int) -> Tuple[Image.Image, Any]:
+        """
+        Retrieves a sample from the dataset at the given index.
+
+        Args:
+            index: The index of the sample to retrieve.
+
+        Returns:
+            A Tuple of (image and label). Applies a transform, if one is specified.
+        """
+
         image_path = self.image_paths[index]
         image = Image.open(image_path)
         labels = self.labels_data[image_path.name]
+        if self.transform:
+            image, labels = self.transform(image, labels)
+
         return image, labels
 
     
@@ -83,7 +131,8 @@ class LineLevelDataset(WhalesBaseDataset):
 
         labels_info = {}
         for entry in data['line_level_info']:
-            labels_info[entry['image_name']] = {
+            image_name = entry['image_name']
+            labels_info[image_name] = {
                 'unit_intervals': entry['unit_intervals'],
                 'unit_classes': entry['unit_classes']
             }
@@ -95,5 +144,16 @@ class PageLevelDataset(WhalesBaseDataset):
     def _get_paths(self):
         return self.dataset_dir / 'images' / 'pages', self.dataset_dir / 'labels' / 'page_level'
 
+    def _parse_label(self, label_path):
+        with open(label_path) as js:
+            data = json.load(js)
 
+        labels_info = {}
+        image_name = data['image_name']
+        poly_coords = []
+        for pol in data['polygons']:
+            poly_coords.append(pol['points'])
+        
+        labels_info[image_name] = poly_coords
+        return labels_info
 
