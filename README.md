@@ -1,5 +1,5 @@
 # whale-spectrogram-dataset-tools
-A collection of Python utilities and classes for processing whale spectrogram images, visualizing annotations, and 
+A collection of python utilities and classes for processing whale spectrogram images, visualizing annotations, and 
 preparing data for object detection models. This repository serves as supplementary material to the Humpback Whales 
 Spectrogram Dataset.
 
