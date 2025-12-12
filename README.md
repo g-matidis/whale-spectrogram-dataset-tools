@@ -3,4 +3,4 @@ A collection of python utilities and classes for processing whale spectrogram im
 preparing data for object detection models. This repository serves as supplementary material to the Humpback Whales 
 Spectrogram Dataset.
 
-Note: The dataset, the data descriptor (paper), and the full documentation for this repository will be published soon.
+Note: The dataset, the data descriptor (paper), and the full documentation for this repository will be available soon.
