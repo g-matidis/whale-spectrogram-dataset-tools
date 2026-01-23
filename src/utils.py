@@ -3,7 +3,7 @@ import json
 from typing import Dict, List, Callable
 
 def is_valid_file(filepath: Path) -> bool:
-    """Checks if the file is hidden, or if it is in a hidden folder (e.g. ".ipynb_checkpoints", ".git", etc.)."""
+    """Checks if the file is hidden, or if it is in a hidden directory (e.g. ".ipynb_checkpoints", ".git", etc.)."""
     check = lambda part: not part.startswith('.') or part == '..'
     return all(map(check, filepath.parts))
 
