@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from typing import Tuple, List, Dict, Any, Callable
 from PIL import Image, ImageOps
 import copy
-from utils import is_valid_file
+from src.utils import is_valid_file, parse_line_level_data, aggregate_labels_info
 
 class WhalesBaseDataset(Dataset, ABC):
     """
@@ -86,16 +86,8 @@ class WhalesBaseDataset(Dataset, ABC):
         pass
 
     def _parse_all_labels(self):
-        """Iterates over all JSON files in the label directory and aggregates them into a single dictionary."""
-        label_paths = self.labels_dir.rglob('*.json')
-        labels_data = {}
-        for path in label_paths:
-            if is_valid_file(path):
-
-                # Update the dictionary with all the label info (cache)
-                labels_data |= self._parse_labels(path)
-
-        return labels_data
+        """Parses and aggregates all the labels info"""
+        return aggregate_labels_info(self.labels_dir, self._parse_labels)
     
     def __len__(self) -> int:
         """Returns the total number of samples of the dataset."""
@@ -134,52 +126,7 @@ class LineLevelDataset(WhalesBaseDataset):
     def _parse_labels(self, 
         labels_path: str | Path
     ) -> Dict[str, Dict[str, List]]:
-        """
-        Parses line-level JSON data and reformats it for easy lookup by line image name.
-
-        Expected JSON structure:
-        {   
-            'general_image_name': filename.png
-            'line_level_info': [
-                {
-                    'image_name': 'filename-{line_id}.png',
-                    'line_id': int,
-                    'song_id': int,
-                    'unit_intervals': [[start, end], ...],
-                    'mute_intervals': [[start, end], ...],
-                    'unit_classes': [class_name, ...],
-                    'image_height': int,
-                    'image_width': int
-                },
-                ...
-            ]
-        }
-
-        Args:
-            labels_path: Path to the JSON.
-        Returns:
-            A dictionary where the key is the image file name and its values are the intervals and their respective unit 
-            classes. It follows the structure:
-
-            new_dict = {
-                'filename-{line_id}.png': {
-                    'unit_intervals': [[start, end], ...],
-                    'unit_classes': [class_name, ...]
-                }
-            }
-        """
-        with open(labels_path) as js:
-            data = json.load(js)
-
-        labels_info = {}
-        for entry in data['line_level_info']:
-            image_name = entry['image_name']
-            labels_info[image_name] = {
-                'unit_intervals': entry['unit_intervals'],
-                'unit_classes': entry['unit_classes']
-            }
-
-        return labels_info 
+        return parse_line_level_data(labels_path) 
 
 class PageLevelDataset(WhalesBaseDataset):
     """Dataset loader for the page-level subset."""
