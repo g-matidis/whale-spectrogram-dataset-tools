@@ -86,7 +86,7 @@ class WhalesBaseDataset(Dataset, ABC):
         pass
 
     def _parse_all_labels(self):
-        """Parses and aggregates all the labels info"""
+        """Parses and aggregates all the labels info."""
         return aggregate_labels_info(self.labels_dir, self._parse_labels)
     
     def __len__(self) -> int:
