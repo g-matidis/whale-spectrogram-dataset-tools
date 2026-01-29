@@ -14,5 +14,5 @@ A PyTorch-based toolkit for loading, processing, visualizing, and evaluating Hum
 
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/g-matidis/whale-spectrogram-dataset-tools.git](https://github.com/g-matidis/whale-spectrogram-dataset-tools.git)
+   git clone https://github.com/g-matidis/whale-spectrogram-dataset-tools.git
    cd whale-spectrogram-dataset-tools
