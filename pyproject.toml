@@ -10,4 +10,9 @@ dependencies = [
     "opencv-python>=4.13.0.90",
     "pandas>=2.3.3",
     "pillow>=12.1.0",
+    "torch>=2.10.0",
+    "torchvision>=0.25.0",
 ]
+
+[tool.uv]
+package = true
