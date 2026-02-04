@@ -11,26 +11,26 @@ A PyTorch-based toolkit for loading, processing, visualizing, and evaluating Hum
 - `src/utils.py`: General helper functions (e.g. `is_valid_file`) and parsers (e.g. `parse_line_level_data`).
 
 ## 🚀 Installation
-1. Clone the repository:
+### Clone the repository:
    ```bash
    git clone https://github.com/g-matidis/whale-spectrogram-dataset-tools.git
    cd whale-spectrogram-dataset-tools
    ```
 
-You can set up this project using the modern `uv` manager (recommended) or traditional `pip`.
-### Option A: Using `uv` (recommended).
+### Set up this project using the modern `uv` manager (recommended) or traditional `pip`.
+* ### Option A: Using `uv` (recommended).
 1. Install `uv' from https://astral.sh/uv.
 2. Install dependencies:
    ```bash
    uv sync
    ```
 
-### Option 2: Using `pip`.
+* ### Option 2: Using `pip`.
 1. Create and activate your virtual environment:
    ```bash
    python -m venv .your_env_name
    source .venv/bin/activate
+   ```
 
 ## 📥 Download the Dataset
-TO BE WRITTEN!!!
-
+1. Download the Whales Spectrogram Dataset [here](LINK TO BE PROVIDED AT THE FUTURE).  
