@@ -5,7 +5,12 @@ from abc import ABC, abstractmethod
 from typing import Tuple, List, Dict, Any, Callable
 from PIL import Image, ImageOps
 import copy
-from src.utils import is_valid_file, parse_line_level_data, parse_page_level_data, aggregate_labels_info
+from whale_spectrogram_dataset_tools.utils import (
+    is_valid_file,
+    parse_line_level_data,
+    parse_page_level_data,
+    aggregate_labels_info
+)  
 
 class WhalesBaseDataset(Dataset, ABC):
     """

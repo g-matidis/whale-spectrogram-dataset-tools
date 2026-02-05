@@ -4,7 +4,12 @@ import argparse
 import numpy as np
 from pathlib import Path
 from typing import List, Dict, Tuple, Callable
-from utils import is_valid_file, parse_line_level_data, parse_page_level_data, aggregate_labels_info
+from whale_spectrogram_dataset_tools.utils import (
+    is_valid_file,
+    parse_line_level_data,
+    parse_page_level_data,
+    aggregate_labels_info
+)  
 
 def convert_intervals_to_bboxes(
     intervals: List[List[float]], 
