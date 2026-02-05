@@ -17,7 +17,7 @@ A PyTorch-based toolkit for loading, processing, visualizing, and evaluating Hum
    cd whale-spectrogram-dataset-tools
    ```
 
-### Set up this project using the modern `uv` manager (recommended) or traditional `pip`.
+### Set up this project using the modern `uv` manager (recommended) or the traditional `pip`.
 * ### Option A: Using `uv` (recommended).
 1. Install `uv' from https://astral.sh/uv.
 2. Install dependencies:
@@ -29,12 +29,15 @@ A PyTorch-based toolkit for loading, processing, visualizing, and evaluating Hum
 1. Create and activate your virtual environment:
    ```bash
    python -m venv .your_env_name
-   source .venv/bin/activate
+   source .your_env_name/bin/activate
+   ```
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
    ```
 
 ## 📥 Download the Dataset
-1. Download the Whales Spectrogram Dataset [here](https://iptademokritosgr-my.sharepoint.com/:f:/g/personal/gmatidis_iit_demokritos_gr/IgDgYsfVn2V7T5eZEJzxkUrOAXc8Enf_BOgRjALbIt9vM00?e=0QmESh).
-2. Copy the dataset directory in [./data](./data).
+NOTE: The dataset is not available yet! For now, you can test and explore the project's tools on the [sample data](./data/samples/).
 
 ## Visualize the data
 TO BE WRITTEN!!!!@
