@@ -33,7 +33,11 @@ A PyTorch-based toolkit for loading, processing, visualizing, and evaluating Hum
    ```
 2. Install dependencies:
    ```bash
-   pip install -r requirements.txt
+   pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu124
+   ```
+3. Link project's source code to the environment:
+   ```bash
+   pip install -e .
    ```
 
 ## 📥 Download the Dataset
